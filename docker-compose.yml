@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  php:
+    working_dir: /app
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - .:/app
+    command: bash -c "composer install"
+    ports:
+      - "9012:9012"
+    expose:
+      - 9012

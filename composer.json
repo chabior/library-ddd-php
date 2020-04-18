@@ -1,0 +1,34 @@
+{
+  "name": "chabior/library",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Paweł Chabierski",
+      "email": "p.chabierski@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4",
+    "ramsey/uuid": "^3.8",
+    "myclabs/php-enum": "^1.7",
+    "doctrine/collections": "^1.6",
+    "nesbot/carbon": "^2.32"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master",
+    "phpunit/phpunit": "^8.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Chabior\\Library\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Chabior\\Library\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit tests"
+  }
+}
