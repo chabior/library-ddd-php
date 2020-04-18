@@ -59,10 +59,13 @@ class ResearcherHoldTest extends TestCase
         $researcher->checkout($otherBook);
 
         //wait 60 days
+        Carbon::setTestNow(Carbon::now()->addDays(60));
 
         $result = $researcher->hold(Book::circulating());
 
         $this->assertTrue($result->isFailure());
         $this->assertInstanceOf(MaximumNumberOfOverdueCheckoutsExceededReason::class, $result->reason());
+
+        Carbon::setTestNow(Carbon::now());
     }
 }

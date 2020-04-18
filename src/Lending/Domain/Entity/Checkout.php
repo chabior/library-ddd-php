@@ -28,7 +28,7 @@ class Checkout
 
     public function isOverdue(): bool
     {
-        return $this->expiresAt < new DateTimeImmutable();
+        return Carbon::now()->greaterThan($this->expiresAt);
     }
 
 

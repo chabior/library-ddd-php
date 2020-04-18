@@ -32,7 +32,7 @@ class Researcher
             return Result::failure(new BookIsNotAvailableReason());
         }
 
-        if ($this->getNumberOfOverdueCheckouts() > 2) {
+        if ($this->getNumberOfOverdueCheckouts() >= 2) {
             return Result::failure(new MaximumNumberOfOverdueCheckoutsExceededReason());
         }
 
