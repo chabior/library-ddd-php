@@ -11,7 +11,7 @@ class MaximumNumberOfOverdueCheckoutPolicy implements HoldPolicy
 {
     private const MAX_OVERDUE_CHECKOUTS = 2;
 
-    public function isFulfilled(Patron $patron, Book $book): bool
+    public function isFulfilled(Patron $patron, Book $book, ?int $numberOfDays): bool
     {
         return !$patron->hasMoreOrEqualsOverdueCheckouts(self::MAX_OVERDUE_CHECKOUTS);
     }

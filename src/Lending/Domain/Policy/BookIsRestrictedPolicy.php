@@ -9,7 +9,7 @@ use Chabior\Library\Lending\Domain\Reason\CanNotHoldRestrictedBookReason;
 
 class BookIsRestrictedPolicy implements HoldPolicy
 {
-    public function isFulfilled(Patron $patron, Book $book): bool
+    public function isFulfilled(Patron $patron, Book $book, ?int $numberOfDays): bool
     {
         return !$book->isRestricted();
     }

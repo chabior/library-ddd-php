@@ -2,29 +2,29 @@
 
 namespace Chabior\Library\Lending\Domain\Entity;
 
-use Chabior\Library\Common\Result;
 use Chabior\Library\Lending\Domain\Policy\BookIsAvailablePolicy;
 use Chabior\Library\Lending\Domain\Policy\BookIsRestrictedPolicy;
 use Chabior\Library\Lending\Domain\Policy\CompositeHoldPolicy;
+use Chabior\Library\Lending\Domain\Policy\HoldPolicy;
 use Chabior\Library\Lending\Domain\Policy\MaximumNumberOfHoldsPolicy;
 use Chabior\Library\Lending\Domain\Policy\MaximumNumberOfOverdueCheckoutPolicy;
-use Chabior\Library\Lending\Domain\Reason\CanNotHoldForLessDayOneDayReason;
+use Chabior\Library\Lending\Domain\Policy\NumberOfDaysLowerThanOnePolicy;
 
 class RegularPatron extends Patron
 {
-    public function hold(Book $book, int $numberOfDays): Result
+    protected function createHoldPolicy(): HoldPolicy
     {
-        if ($numberOfDays < 1) {
-            return Result::failure(new CanNotHoldForLessDayOneDayReason());
-        }
-
-        $policy = new CompositeHoldPolicy(
+        return new CompositeHoldPolicy(
             new BookIsAvailablePolicy(),
             new BookIsRestrictedPolicy(),
             new MaximumNumberOfHoldsPolicy(),
             new MaximumNumberOfOverdueCheckoutPolicy(),
+            new NumberOfDaysLowerThanOnePolicy(),
         );
+    }
 
-        return $this->performHold($policy, $book, $numberOfDays);
+    protected function createHold(Book $book, ?int $numberOfDays): Hold
+    {
+        return new ClosedEndedHold($book, $this, $numberOfDays);
     }
 }

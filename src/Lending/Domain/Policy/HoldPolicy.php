@@ -8,7 +8,7 @@ use Chabior\Library\Lending\Domain\Entity\Patron;
 
 interface HoldPolicy
 {
-    public function isFulfilled(Patron $patron, Book $book): bool;
+    public function isFulfilled(Patron $patron, Book $book, ?int $numberOfDays): bool;
 
     public function reason(): Reason;
 }

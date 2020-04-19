@@ -18,10 +18,10 @@ class CompositeHoldPolicy implements HoldPolicy
         $this->policies = $policies;
     }
 
-    public function isFulfilled(Patron $patron, Book $book): bool
+    public function isFulfilled(Patron $patron, Book $book, ?int $numberOfDays): bool
     {
         foreach ($this->policies as $policy) {
-            if (!$policy->isFulfilled($patron, $book)) {
+            if (!$policy->isFulfilled($patron, $book, $numberOfDays)) {
                 $this->reason = $policy->reason();
                 return false;
             }

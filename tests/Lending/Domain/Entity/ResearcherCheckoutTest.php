@@ -14,7 +14,7 @@ class ResearcherCheckoutTest extends TestCase
     {
         $researcher = new Researcher();
         $book = Book::restricted();
-        $researcher->hold($book);
+        $researcher->hold($book, null);
 
         $result = $researcher->checkout($book);
         $this->assertTrue($result->isSuccess());

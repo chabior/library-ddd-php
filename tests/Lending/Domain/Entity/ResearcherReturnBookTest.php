@@ -14,7 +14,7 @@ class ResearcherReturnBookTest extends TestCase
     {
         $book = Book::restricted();
         $researcher = new Researcher();
-        $researcher->hold($book);
+        $researcher->hold($book, null);
         $researcher->checkout($book);
 
         $result = $researcher->returnBook($book);
@@ -27,7 +27,7 @@ class ResearcherReturnBookTest extends TestCase
     {
         $book = Book::restricted();
         $researcher = new Researcher();
-        $researcher->hold($book);
+        $researcher->hold($book, null);
 
         $result = $researcher->returnBook($book);
 

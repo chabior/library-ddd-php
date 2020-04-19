@@ -2,22 +2,23 @@
 
 namespace Chabior\Library\Lending\Domain\Entity;
 
-use Chabior\Library\Common\Result;
 use Chabior\Library\Lending\Domain\Policy\BookIsAvailablePolicy;
 use Chabior\Library\Lending\Domain\Policy\CompositeHoldPolicy;
+use Chabior\Library\Lending\Domain\Policy\HoldPolicy;
 use Chabior\Library\Lending\Domain\Policy\MaximumNumberOfOverdueCheckoutPolicy;
 
 class Researcher extends Patron
 {
-    public function hold(Book $book): Result
+    protected function createHoldPolicy(): HoldPolicy
     {
-        $policy = new CompositeHoldPolicy(
+        return new CompositeHoldPolicy(
             new BookIsAvailablePolicy(),
             new MaximumNumberOfOverdueCheckoutPolicy()
         );
-
-        return $this->performHold($policy, $book, null);
     }
 
-
+    protected function createHold(Book $book, ?int $numberOfDays): Hold
+    {
+        return new OpenEndedHold($book, $this);
+    }
 }

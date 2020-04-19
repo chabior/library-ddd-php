@@ -27,18 +27,17 @@ abstract class Patron
         $this->checkouts = new ArrayCollection();
     }
 
-    protected function performHold(HoldPolicy $holdPolicy, Book $book, ?int $numberOfDays = null): Result
+    abstract protected function createHoldPolicy(): HoldPolicy;
+    abstract protected function createHold(Book $book, ?int $numberOfDays): Hold;
+
+    public function hold(Book $book, ?int $numberOfDays): Result
     {
-        if (!$holdPolicy->isFulfilled($this, $book)) {
+        $holdPolicy = $this->createHoldPolicy();
+        if (!$holdPolicy->isFulfilled($this, $book, $numberOfDays)) {
             return Result::failure($holdPolicy->reason());
         }
 
-        if ($numberOfDays) {
-            $this->holds->add(new ClosedEndedHold($book, $this, $numberOfDays));
-        } else {
-            $this->holds->add(new OpenEndedHold($book, $this));
-        }
-
+        $this->holds->add($this->createHold($book, $numberOfDays));
         $book->hold();
 
         return Result::success(new BookHeld($book->getId(), $numberOfDays));
