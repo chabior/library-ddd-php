@@ -59,7 +59,7 @@ class ResearcherHoldTest extends TestCase
         $researcher->checkout($otherBook);
 
         //wait 60 days
-        Carbon::setTestNow(Carbon::now()->addDays(60));
+        Carbon::setTestNow(Carbon::now()->endOfDay()->addDays(61));
 
         $result = $researcher->hold(Book::circulating());
 

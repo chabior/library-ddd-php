@@ -2,22 +2,10 @@
 
 namespace Chabior\Library\Lending\Domain\Entity;
 
-use DateTimeInterface;
-
-class OpenEndedHold
+class OpenEndedHold extends Hold
 {
-    private Book $book;
-
-    private Researcher $researcher;
-
-    public function __construct(Book $book, Researcher $researcher)
+    public function __construct(Book $book, Researcher $patron)
     {
-        $this->book = $book;
-        $this->researcher = $researcher;
-    }
-
-    public function isForBook(Book $book): bool
-    {
-        return $this->book->equals($book);
+        parent::__construct($book, $patron);
     }
 }

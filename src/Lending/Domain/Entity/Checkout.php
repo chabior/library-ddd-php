@@ -3,20 +3,19 @@
 namespace Chabior\Library\Lending\Domain\Entity;
 
 use Carbon\Carbon;
-use DateTimeImmutable;
 use DateTimeInterface;
 
 class Checkout
 {
-    private Researcher $researcher;
+    private Patron $patron;
 
     private Book $book;
 
     private DateTimeInterface $expiresAt;
 
-    public function __construct(Researcher $researcher, Book $book)
+    public function __construct(Patron $patron, Book $book)
     {
-        $this->researcher = $researcher;
+        $this->patron = $patron;
         $this->book = $book;
         $this->expiresAt = Carbon::now()->addDays(60);
     }

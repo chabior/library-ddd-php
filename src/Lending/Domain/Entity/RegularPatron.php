@@ -3,47 +3,28 @@
 namespace Chabior\Library\Lending\Domain\Entity;
 
 use Chabior\Library\Common\Result;
-use Chabior\Library\Lending\Domain\Event\BookHeld;
-use Chabior\Library\Lending\Domain\Reason\BookIsNotAvailableReason;
-use Chabior\Library\Lending\Domain\Reason\CanNotHoldRestrictedBookReason;
-use Chabior\Library\Lending\Domain\Reason\MaximumNumberOfHoldsExceededReason;
-use Chabior\Library\Lending\Domain\Reason\MaximumNumberOfOverdueCheckoutsExceededReason;
-use Doctrine\Common\Collections\Collection;
+use Chabior\Library\Lending\Domain\Policy\BookIsAvailablePolicy;
+use Chabior\Library\Lending\Domain\Policy\BookIsRestrictedPolicy;
+use Chabior\Library\Lending\Domain\Policy\CompositeHoldPolicy;
+use Chabior\Library\Lending\Domain\Policy\MaximumNumberOfHoldsPolicy;
+use Chabior\Library\Lending\Domain\Policy\MaximumNumberOfOverdueCheckoutPolicy;
+use Chabior\Library\Lending\Domain\Reason\CanNotHoldForLessDayOneDayReason;
 
-class RegularPatron
+class RegularPatron extends Patron
 {
-    private int $id;
-
-    private int $overdueCheckouts;
-
-    private Collection $holds;
-
-    public function __construct()
-    {
-        $this->overdueCheckouts = 0;
-        $this->holds = 0;
-    }
-
     public function hold(Book $book, int $numberOfDays): Result
     {
-        if (!$book->isAvailable()) {
-            return Result::failure(new BookIsNotAvailableReason());
+        if ($numberOfDays < 1) {
+            return Result::failure(new CanNotHoldForLessDayOneDayReason());
         }
 
-        if ($book->isRestricted()) {
-            return Result::failure(new CanNotHoldRestrictedBookReason());
-        }
+        $policy = new CompositeHoldPolicy(
+            new BookIsAvailablePolicy(),
+            new BookIsRestrictedPolicy(),
+            new MaximumNumberOfHoldsPolicy(),
+            new MaximumNumberOfOverdueCheckoutPolicy(),
+        );
 
-        if ($this->holds > 5) {
-            return Result::failure(new MaximumNumberOfHoldsExceededReason());
-        }
-
-        if ($this->overdueCheckouts > 2) {
-            return Result::failure(new MaximumNumberOfOverdueCheckoutsExceededReason());
-        }
-
-        ++$this->holds;
-
-        return Result::success(new BookHeld($book->getId(), $numberOfDays));
+        return $this->performHold($policy, $book, $numberOfDays);
     }
 }
