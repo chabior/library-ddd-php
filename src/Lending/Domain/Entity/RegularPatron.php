@@ -3,7 +3,7 @@
 namespace Chabior\Library\Lending\Domain\Entity;
 
 use Chabior\Library\Common\Result;
-use Chabior\Library\Lending\Domain\Event\BookHoled;
+use Chabior\Library\Lending\Domain\Event\BookHeld;
 use Chabior\Library\Lending\Domain\Reason\BookIsNotAvailableReason;
 use Chabior\Library\Lending\Domain\Reason\CanNotHoldRestrictedBookReason;
 use Chabior\Library\Lending\Domain\Reason\MaximumNumberOfHoldsExceededReason;
@@ -44,6 +44,6 @@ class RegularPatron
 
         ++$this->holds;
 
-        return Result::success(new BookHoled($book->getId(), $numberOfDays));
+        return Result::success(new BookHeld($book->getId(), $numberOfDays));
     }
 }

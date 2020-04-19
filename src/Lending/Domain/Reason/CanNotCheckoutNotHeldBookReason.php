@@ -4,7 +4,7 @@ namespace Chabior\Library\Lending\Domain\Reason;
 
 use Chabior\Library\Common\Result\Reason;
 
-class CanNotCancelNotHoledBookReason extends Reason
+class CanNotCheckoutNotHeldBookReason extends Reason
 {
 
 }

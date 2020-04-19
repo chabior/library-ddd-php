@@ -5,7 +5,7 @@ namespace Lending\Domain\Entity;
 use Chabior\Library\Lending\Domain\Entity\Book;
 use Chabior\Library\Lending\Domain\Entity\Researcher;
 use Chabior\Library\Lending\Domain\Event\BookCheckout;
-use Chabior\Library\Lending\Domain\Reason\CanNotCheckoutNotHoledBookReason;
+use Chabior\Library\Lending\Domain\Reason\CanNotCheckoutNotHeldBookReason;
 use PHPUnit\Framework\TestCase;
 
 class ResearcherCheckoutTest extends TestCase
@@ -29,6 +29,6 @@ class ResearcherCheckoutTest extends TestCase
         $result = $researcher->checkout($book);
 
         $this->assertTrue($result->isFailure());
-        $this->assertInstanceOf(CanNotCheckoutNotHoledBookReason::class, $result->reason());
+        $this->assertInstanceOf(CanNotCheckoutNotHeldBookReason::class, $result->reason());
     }
 }

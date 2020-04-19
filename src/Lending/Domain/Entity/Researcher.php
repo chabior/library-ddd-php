@@ -4,12 +4,12 @@ namespace Chabior\Library\Lending\Domain\Entity;
 
 use Chabior\Library\Common\Result;
 use Chabior\Library\Lending\Domain\Event\BookCheckout;
-use Chabior\Library\Lending\Domain\Event\BookHoled;
+use Chabior\Library\Lending\Domain\Event\BookHeld;
 use Chabior\Library\Lending\Domain\Event\BookReturned;
 use Chabior\Library\Lending\Domain\Event\HoldCanceled;
 use Chabior\Library\Lending\Domain\Reason\BookIsNotAvailableReason;
-use Chabior\Library\Lending\Domain\Reason\CanNotCancelNotHoledBookReason;
-use Chabior\Library\Lending\Domain\Reason\CanNotCheckoutNotHoledBookReason;
+use Chabior\Library\Lending\Domain\Reason\CanNotCancelNotHeldBookReason;
+use Chabior\Library\Lending\Domain\Reason\CanNotCheckoutNotHeldBookReason;
 use Chabior\Library\Lending\Domain\Reason\CanNotReturnNotCheckoutBookReason;
 use Chabior\Library\Lending\Domain\Reason\MaximumNumberOfOverdueCheckoutsExceededReason;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -39,7 +39,7 @@ class Researcher
         $this->holds->add(new OpenEndedHold($book, $this));
         $book->hold();
 
-        return Result::success(new BookHoled($book->getId(), null));
+        return Result::success(new BookHeld($book->getId(), null));
     }
 
     public function checkout(Book $book): Result
@@ -47,7 +47,7 @@ class Researcher
         $hold = $this->findHold($book);
 
         if ($hold === null) {
-            return Result::failure(new CanNotCheckoutNotHoledBookReason());
+            return Result::failure(new CanNotCheckoutNotHeldBookReason());
         }
 
         $this->holds->removeElement($book);
@@ -62,7 +62,7 @@ class Researcher
         $hold = $this->findHold($book);
 
         if ($hold === null) {
-            return Result::failure(new CanNotCancelNotHoledBookReason());
+            return Result::failure(new CanNotCancelNotHeldBookReason());
         }
 
         $this->holds->removeElement($book);

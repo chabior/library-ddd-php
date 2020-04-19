@@ -5,7 +5,7 @@ namespace Chabior\Library\Lending\Domain\Event;
 use Chabior\Library\Common\DomainEvent;
 use Ramsey\Uuid\UuidInterface;
 
-class BookHoled implements DomainEvent
+class BookHeld implements DomainEvent
 {
     private UuidInterface $bookId;
 

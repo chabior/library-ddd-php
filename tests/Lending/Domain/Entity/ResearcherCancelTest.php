@@ -5,7 +5,7 @@ namespace Lending\Domain\Entity;
 use Chabior\Library\Lending\Domain\Entity\Book;
 use Chabior\Library\Lending\Domain\Entity\Researcher;
 use Chabior\Library\Lending\Domain\Event\HoldCanceled;
-use Chabior\Library\Lending\Domain\Reason\CanNotCancelNotHoledBookReason;
+use Chabior\Library\Lending\Domain\Reason\CanNotCancelNotHeldBookReason;
 use PHPUnit\Framework\TestCase;
 
 class ResearcherCancelTest extends TestCase
@@ -29,6 +29,6 @@ class ResearcherCancelTest extends TestCase
         $result = $researcher->cancelHold($book);
 
         $this->assertTrue($result->isFailure());
-        $this->assertInstanceOf(CanNotCancelNotHoledBookReason::class, $result->reason());
+        $this->assertInstanceOf(CanNotCancelNotHeldBookReason::class, $result->reason());
     }
 }

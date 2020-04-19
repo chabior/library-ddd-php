@@ -5,7 +5,7 @@ namespace Lending\Domain\Entity;
 use Carbon\Carbon;
 use Chabior\Library\Lending\Domain\Entity\Book;
 use Chabior\Library\Lending\Domain\Entity\Researcher;
-use Chabior\Library\Lending\Domain\Event\BookHoled;
+use Chabior\Library\Lending\Domain\Event\BookHeld;
 use Chabior\Library\Lending\Domain\Reason\BookIsNotAvailableReason;
 use Chabior\Library\Lending\Domain\Reason\MaximumNumberOfOverdueCheckoutsExceededReason;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +20,7 @@ class ResearcherHoldTest extends TestCase
 
         $this->assertTrue($result->isSuccess());
         $this->assertFalse($book->isAvailable());
-        $this->assertInstanceOf(BookHoled::class, $result->events()[0]);
+        $this->assertInstanceOf(BookHeld::class, $result->events()[0]);
     }
 
     public function testCanHoldCirculatingBook(): void
@@ -31,7 +31,7 @@ class ResearcherHoldTest extends TestCase
 
         $this->assertTrue($result->isSuccess());
         $this->assertFalse($book->isAvailable());
-        $this->assertInstanceOf(BookHoled::class, $result->events()[0]);
+        $this->assertInstanceOf(BookHeld::class, $result->events()[0]);
     }
 
     public function testCanNotHoldNotAvailableBook(): void
